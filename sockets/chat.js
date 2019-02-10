@@ -6,4 +6,10 @@ module.exports = (io, socket) => {
     io.emit('new user', username);
   })
 
+  // Listen: 'New Message' socket emits
+  socket.on('new message', (data) => {
+    console.log(`${data.sender}: ${data.message}`)
+    io.emit('new message', data);
+  });
+
 }

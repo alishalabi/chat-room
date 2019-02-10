@@ -1,18 +1,47 @@
 $(document).ready( () => {
   const socket = io.connect();
 
+  // Current user
+  let currentUser;
+
   // Socket Event: New User
   $('#createUserBtn').click((e) => {
     e.preventDefault();
-    let username = $('#usernameInput').val();
-    if(username.length > 0) {
-      socket.emit('new user', username);
+    if($('#usernameInput').val().length > 0) {
+      socket.emit('new user', $('#usernameInput').val());
+      currentUser = $('#usernameInput').val();
       $('.usernameForm').remove();
+      $('.mainContainer').css('display', 'flex');
     }
-  })
+  });
+
+  // Socket Event: New Message
+  $('#sendChatBtn').click((e) => {
+    e.preventDefault();
+    const message = $('#chatInput').val();
+    if(message.length > 0){
+      socket.emit('new message', {
+        sender: currentUser,
+        message: message,
+      });
+      $('#chatInput').val('');
+    }
+  });
 
   // Socket Listener: New User
   socket.on('new user', (username) => {
-    console.log(`${username} has joined the chat!`)
+    console.log(`${username} has joined the chat!`);
+    $('.userOnline').append(`<div class='userOnline'>${username}</div>`);
+  });
+
+  // Socket Listener: New Message
+  socket.on('new message', (data) => {
+    $('.messageContainer').append(`
+      <div class="message">
+        <p class="messageUser">${data.sender}: </p>
+        <p class="messageText">${data.message}</p>
+      </div>
+      `);
   })
+
 })
