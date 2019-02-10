@@ -7,7 +7,7 @@ $(document).ready( () => {
   // Get online users from the server
   socket.emit('get online users');
 
-  // Socket Event: New User
+  // Event Handler: New User
   $('#createUserBtn').click((e) => {
     e.preventDefault();
     if($('#usernameInput').val().length > 0) {
@@ -18,7 +18,7 @@ $(document).ready( () => {
     }
   });
 
-  // Socket Event: New Message
+  // Event Handler: New Message
   $('#sendChatBtn').click((e) => {
     e.preventDefault();
     const message = $('#chatInput').val();
@@ -30,6 +30,8 @@ $(document).ready( () => {
       $('#chatInput').val('');
     }
   });
+
+
 
   // Socket Listener: New User
   socket.on('new user', (username) => {
@@ -56,7 +58,7 @@ $(document).ready( () => {
   });
 
   // Socket Listener: Disconnect
-  socket.on('disconnet', () => {
+  socket.on('disconnect', () => {
     delete onlineUsers[socket.username]
     io.emit('user has left', onlineUsers);
   })
@@ -68,5 +70,21 @@ $(document).ready( () => {
       $('.usersOnline').append(`<p>${username}</p>`);
     }
   })
+
+  // Socket Listener: New Channel
+  $('#newChannelBtn').click( () => {
+    let newChannel = $('#newChannelInput').val();
+
+    if(newChannel.length > 0){
+      socket.emit('new channel', newChannel);
+      $('#newChannelInput').val('');
+    }
+  })
+
+  // Socket Listener: New Channel
+  socket.on('new channel', (newChannel) => {
+    console.log(`New channel: ${newChannel}`)
+  })
+
 
 })

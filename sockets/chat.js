@@ -5,7 +5,6 @@ module.exports = (io, socket, onlineUsers) => {
     onlineUsers[username] = socket.id;
     socket.username = username;
     console.log(`${username} has joined the party!`);
-    console.log(onlineUsers)
     io.emit('new user', username);
   })
 
