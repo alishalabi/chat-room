@@ -1,8 +1,11 @@
-module.exports = (io, socket) => {
+module.exports = (io, socket, onlineUsers) => {
 
   // Listen: 'New User' socket emits
   socket.on('new user', (username) => {
+    onlineUsers[username] = socket.id;
+    socket.username = username;
     console.log(`${username} has joined the party!`);
+    console.log(onlineUsers)
     io.emit('new user', username);
   })
 
@@ -11,5 +14,10 @@ module.exports = (io, socket) => {
     console.log(`${data.sender}: ${data.message}`)
     io.emit('new message', data);
   });
+
+  // Listen: 'Online Users' socket emits
+  socket.on('get online users', () => {
+    socket.emit('get online users', onlineUsers);
+  })
 
 }

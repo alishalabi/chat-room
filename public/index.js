@@ -4,6 +4,9 @@ $(document).ready( () => {
   // Current user
   let currentUser;
 
+  // Get online users from the server
+  socket.emit('get online users');
+
   // Socket Event: New User
   $('#createUserBtn').click((e) => {
     e.preventDefault();
@@ -42,6 +45,28 @@ $(document).ready( () => {
         <p class="messageText">${data.message}</p>
       </div>
       `);
+  })
+
+
+  // Socket Listener: Online Users
+  socket.on('get online users', (onlineUsers) => {
+    for(username in onlineUsers) {
+      $('.userOnline').append(`<p class="userOnline">${username}</p>`);
+    }
+  });
+
+  // Socket Listener: Disconnect
+  socket.on('disconnet', () => {
+    delete onlineUsers[socket.username]
+    io.emit('user has left', onlineUsers);
+  })
+
+  // Refresh Online Users
+  socket.on('user has left', (onlineUsers) => {
+    $('.userOnline').empty();
+    for(username in onlineUsers){
+      $('.usersOnline').append(`<p>${username}</p>`);
+    }
   })
 
 })
