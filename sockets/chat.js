@@ -1,4 +1,4 @@
-module.exports = (io, socket, onlineUsers) => {
+module.exports = (io, socket, onlineUsers, channels) => {
 
   // Listen: 'New User' socket emits
   socket.on('new user', (username) => {
