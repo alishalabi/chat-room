@@ -19,4 +19,10 @@ module.exports = (io, socket, onlineUsers) => {
     socket.emit('get online users', onlineUsers);
   })
 
+  // Listen: User Disconneted
+  socket.on('disconnect', () => {
+    delete onlineUsers[socket.username]
+    io.emit('user has left', onlineUsers)
+  })
+
 }

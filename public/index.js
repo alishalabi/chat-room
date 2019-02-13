@@ -36,7 +36,7 @@ $(document).ready( () => {
   // Socket Listener: New User
   socket.on('new user', (username) => {
     console.log(`${username} has joined the chat!`);
-    $('.userOnline').append(`<div class='userOnline'>${username}</div>`);
+    $('.onlineUsers').append(`<p>${username}</p>`);
   });
 
   // Socket Listener: New Message
@@ -53,11 +53,11 @@ $(document).ready( () => {
   // Socket Listener: Online Users
   socket.on('get online users', (onlineUsers) => {
     for(username in onlineUsers) {
-      $('.userOnline').append(`<p class="userOnline">${username}</p>`);
+      $('.onlineUsers').append(`<p>${username}</p>`);
     }
   });
 
-  // Socket Listener: Disconnect
+  // // Socket Listener: Disconnect
   socket.on('disconnect', () => {
     delete onlineUsers[socket.username]
     io.emit('user has left', onlineUsers);
@@ -65,9 +65,9 @@ $(document).ready( () => {
 
   // Refresh Online Users
   socket.on('user has left', (onlineUsers) => {
-    $('.userOnline').empty();
+    $('.onlineUsers').empty();
     for(username in onlineUsers){
-      $('.usersOnline').append(`<p>${username}</p>`);
+      $('.onlineUsers').append(`<p>${username}</p>`);
     }
   })
 
@@ -85,6 +85,7 @@ $(document).ready( () => {
   socket.on('new channel', (newChannel) => {
     console.log(`New channel: ${newChannel}`)
   })
+
 
 
 })
