@@ -1,11 +1,14 @@
 $(document).ready( () => {
   const socket = io.connect();
-
-  // Current user
   let currentUser;
-
-  // Get online users from the server
   socket.emit('get online users');
+  socket.emit('user changed channel', "General");
+
+  // Change channels 
+  $(document).on('click', '.channel', (e)=>{
+    let newChannel = e.target.textContent;
+    socket.emit('user changed channel', newChannel);
+  });
 
   // Event Handler: New User
   $('#createUserBtn').click((e) => {
@@ -51,7 +54,7 @@ $(document).ready( () => {
           <p class="messageText">${data.message}</p>
         </div>
         `);
-    }  
+    }
   })
 
 

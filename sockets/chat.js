@@ -36,4 +36,13 @@ module.exports = (io, socket, onlineUsers, channels) => {
     })
   })
 
+  // Socket Listener: Join Channel
+  socket.on('user changes channel', (newChannel) => {
+    socket.join(newChannel);
+    socket.emit('user changed channel', {
+      channel: newChannel,
+      messages: channels[newChannel]
+    })
+  })
+
 }
